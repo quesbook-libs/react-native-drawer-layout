@@ -21,6 +21,7 @@ const SETTLING = 'Settling';
 
 export type PropType = {
   children: any,
+  disenableGestures?: boolean,
   drawerBackgroundColor?: string,
   drawerLockMode?: 'unlocked' | 'locked-closed' | 'locked-open',
   drawerPosition: 'left' | 'right',
@@ -160,11 +161,14 @@ export default class DrawerLayout extends Component {
     const animatedOverlayStyles = { opacity: overlayOpacity };
     const pointerEvents = drawerShown ? 'auto' : 'none';
 
+    let props = {
+      style: { flex: 1, backgroundColor: 'transparent' },
+    };
+    if (!this.props.disenableGestures) {
+      props = { ...props, ...this._panResponder.panHandlers };
+    }
     return (
-      <View
-        style={{ flex: 1, backgroundColor: 'transparent' }}
-        {...this._panResponder.panHandlers}
-      >
+      <View {...props}>
         <Animated.View style={styles.main}>
           {this.props.children}
         </Animated.View>
